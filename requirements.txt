@@ -1,3 +1,5 @@
 discord.py
-websockets
+requests
 python-dotenv
+imgkit
+websockets

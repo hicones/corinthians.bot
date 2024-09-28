@@ -1,20 +1,37 @@
-# Use uma imagem base oficial do Python mais recente (Python 3.11)
+# Usar uma imagem base oficial do Python
 FROM python:3.11-slim
 
-# Defina o diretório de trabalho no contêiner
+# Definir o diretório de trabalho
 WORKDIR /app
 
-# Copie o arquivo requirements.txt para o contêiner (caso você o tenha)
-COPY requirements.txt .
+# Instalar dependências necessárias para o wkhtmltoimage funcionar
+RUN apt-get update && apt-get install -y \
+    libxrender1 \
+    libxext6 \
+    libfontconfig1 \
+    libfreetype6 \
+    libjpeg62-turbo \
+    libpng-dev \
+    libssl-dev \
+    libx11-dev \
+    libxrandr-dev \
+    xfonts-75dpi \
+    xfonts-base \
+    wget
 
-# Instale as dependências Python necessárias
+# Baixar e instalar o wkhtmltoimage
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb && \
+    dpkg -i wkhtmltox_0.12.6-1.bionic_amd64.deb && \
+    apt-get install -f
+
+# Copiar os arquivos do projeto para o diretório de trabalho
+COPY . /app
+
+# Instalar as dependências do Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copie o restante dos arquivos do projeto para o contêiner
-COPY . .
-
-# Exponha a porta (se necessário)
+# Expor a porta que será usada pelo bot (opcional, caso precise fazer testes de saúde)
 EXPOSE 8000
 
-# Execute o bot ao iniciar o contêiner
-CMD ["python", "bot.py"]
+# Comando para rodar o bot
+CMD ["python", "main.py"]
