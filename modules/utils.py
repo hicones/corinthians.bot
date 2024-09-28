@@ -7,7 +7,7 @@ def image_to_base64(path):
         return base64.b64encode(img_file.read()).decode('utf-8')
 
 
-def download_and_save_icon(url, team_id):
+def download_and_save_icon(url, team_id): 
     if not os.path.exists("teams_icons"):
         os.makedirs("teams_icons")
 

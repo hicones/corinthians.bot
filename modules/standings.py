@@ -113,7 +113,7 @@ def generate_html_standings(standings, previous_standings):
     for index, team in enumerate(standings):
         position = team['position']
         short_name = team['team']['shortName'][:15]
-        crest_base64 = image_to_base64(baixar_e_salvar_icone(team['team']['crest'], team['team']['id']))
+        crest_base64 = image_to_base64(download_and_save_icon(team['team']['crest'], team['team']['id']))
         crest_img = f'data:image/png;base64,{crest_base64}'
         
         points = team['points']
@@ -125,7 +125,7 @@ def generate_html_standings(standings, previous_standings):
         goals_against = team['goalsAgainst']
         goal_difference = team['goalDifference']
 
-        pos_indicator = comparar_posicoes(str(team['team']['id']), position, posicoes_anteriores)
+        pos_indicator = compare_positions(str(team['team']['id']), position, previous_standings)
         
         if team['team']['tla'] == corinthians_tla:
             row_class = 'bg-gray'
