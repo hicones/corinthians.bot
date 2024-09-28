@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Execute o bot ao iniciar o contêiner
-CMD ["python", "main.py"]
+CMD ["python", "bot.py"]
