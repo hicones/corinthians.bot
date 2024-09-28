@@ -1,6 +1,5 @@
-# Bot do Discord - Tabela do Campeonato Brasileiro Série A
-
-Este é um bot do Discord que utiliza a API da [Football Data](https://www.football-data.org/) para buscar e exibir a tabela do Campeonato Brasileiro Série A. Além disso, o bot é capaz de receber notificações de notícias via WebSocket e mostrar os próximos jogos do Corinthians.
+# Discord Bot - Corinthians
+Este é um bot do Discord que utiliza a API da [Football Data](https://www.football-data.org/) para buscar e exibir dados do campeonato Brasileiro. Além disso, o bot é capaz de receber notificações de notícias via WebSocket e mostrar os próximos jogos do Corinthians.
 
 ## Funcionalidades
 
