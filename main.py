@@ -8,6 +8,10 @@ from modules.calendar import generate_matches_list
 from datetime import datetime, timedelta
 import websockets
 import json
+import logging
+import asyncio
+
+logging.basicConfig(level=logging.INFO)
 
 load_dotenv()
 
@@ -25,7 +29,10 @@ bot = commands.Bot(command_prefix='-corinthians ', intents=intents)
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} está online!')
+    logging.info(f'{bot.user} está online!')
+
+    # Criando a tarefa assíncrona para o WebSocket listener
+    bot.loop.create_task(websocket_listener())  # Inicia o WebSocket automaticamente
 
 def create_base_embed(author, record):
     embed = discord.Embed(
@@ -81,13 +88,21 @@ async def send_external_embed(channel, embed, external):
     await channel.send(embed=embed, view=view)
 
 async def websocket_listener():
-    async with websockets.connect(WEBSOCKET_URL_WITH_TOKEN) as websocket:
-        while True:
-            message = await websocket.recv()
-            post = json.loads(message)
-            channel = bot.get_channel(CHANNEL_ID)
-            if channel:
-                await send_embed_message(channel, post)
+    try:
+        logging.info(f'Conectando ao WebSocket: {WEBSOCKET_URL_WITH_TOKEN}')
+        async with websockets.connect(WEBSOCKET_URL_WITH_TOKEN) as websocket:
+            logging.info('Conexão WebSocket estabelecida com sucesso.')
+            while True:
+                message = await websocket.recv()
+                logging.info(f'Mensagem recebida do WebSocket: {message}')
+                post = json.loads(message)
+                channel = bot.get_channel(CHANNEL_ID)
+                if channel:
+                    await send_embed_message(channel, post)
+    except websockets.ConnectionClosedError as e:
+        logging.error(f'Conexão com WebSocket encerrada: {e}')
+    except Exception as e:
+        logging.error(f'Ocorreu um erro no WebSocket: {e}')
 
 
 @bot.command(name="tabela")
